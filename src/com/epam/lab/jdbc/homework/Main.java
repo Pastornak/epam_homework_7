@@ -4,6 +4,7 @@ import java.sql.Connection;
 
 import com.epam.lab.jdbc.homework.dao.*;
 import com.epam.lab.jdbc.homework.manage.connection.*;
+import com.epam.lab.jdbc.homework.transactions.SpecialityTransaction;
 
 public class Main {
 
