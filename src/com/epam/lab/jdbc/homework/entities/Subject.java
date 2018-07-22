@@ -6,6 +6,8 @@ public class Subject {
 	private String subjectName;
 	private String subjectDescription;
 	
+	public Subject() {}
+	
 	public Subject(int subjectCode, String subjectName, String subjectDescription) {
 		super();
 		this.subjectCode = subjectCode;

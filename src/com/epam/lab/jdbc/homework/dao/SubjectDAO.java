@@ -17,10 +17,8 @@ public class SubjectDAO {
 
 	public static Set<Subject> getAllSubjects() {
 		Set<Subject> result = new HashSet<>();
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "SELECT * FROM university.subject";
-			connection = ConnectionToDB.getNewConnection();
 			ResultSet rs = connection.createStatement().executeQuery(query);
 			Subject subject = null;
 			while(rs.next()) {
@@ -33,23 +31,14 @@ public class SubjectDAO {
 			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
 		return result;
 	}
 	
 	public static Subject getSubjectBySubjectCode(int subjectCode) {
 		Subject result = null;
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "SELECT * FROM university.subject WHERE subject_code = ?";
-			connection = ConnectionToDB.getNewConnection();
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setInt(1, subjectCode);
 			ResultSet rs = statement.executeQuery();
@@ -62,14 +51,7 @@ public class SubjectDAO {
 			statement.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
 		return result;
 	}
 	
@@ -81,10 +63,8 @@ public class SubjectDAO {
 	}
 	
 	public static void createSubject(int subjectCode, String subjectName, String subjectDescription) {
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "INSERT INTO university.subject VALUES(?, ?, ?)";
-			connection = ConnectionToDB.getNewConnection();
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setInt(1, subjectCode);
 			statement.setString(2, subjectName);
@@ -96,14 +76,7 @@ public class SubjectDAO {
 			statement.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 	
 	public static void updateSubject(Subject newSubject) {
@@ -114,10 +87,8 @@ public class SubjectDAO {
 	}
 	
 	public static void updateSubject(int oldSubjectCode, String newSubjectName, String newSubjectDescription) {
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "UPDATE university.subject SET subject_name = ?, subject_description = ? WHERE subject_code = ?";
-			connection = ConnectionToDB.getNewConnection();
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setString(1, newSubjectName);
 			statement.setString(2, newSubjectDescription);
@@ -129,14 +100,7 @@ public class SubjectDAO {
 			statement.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 	
 	public static void deleteSubject(Subject subject) {
@@ -145,10 +109,8 @@ public class SubjectDAO {
 	}
 	
 	public static void deleteSubject(int subjectCode) {
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "DELETE FROM university.subject WHERE subject_code = ?";
-			connection = ConnectionToDB.getNewConnection();
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setInt(1, subjectCode);
 			int rows = statement.executeUpdate();
@@ -156,14 +118,7 @@ public class SubjectDAO {
 			statement.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 	
 	public static boolean isEquals(Subject subject) {

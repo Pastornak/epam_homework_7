@@ -21,6 +21,8 @@ public class Student {
 	private String motherName;
 	private String fatherName;
 	
+	public Student() {}
+	
 	public Student(int studentCode, String surname, String name, String patronymic, String sex, Date dateOfBirth,
 			String address, String phoneNumber, String passportInfo, String gradebookNumber, Date entryDate,
 			Group group, Speciality speciality, String formOfStudying, String motherName, String fatherName) {

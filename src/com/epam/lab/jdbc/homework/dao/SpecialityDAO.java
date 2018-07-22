@@ -17,10 +17,8 @@ public class SpecialityDAO {
 
 	public static Set<Speciality> getAllSpecialities() {
 		Set<Speciality> result = new HashSet<>();
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "SELECT * FROM university.speciality";
-			connection = ConnectionToDB.getNewConnection();
 			ResultSet rs = connection.createStatement().executeQuery(query);
 			Speciality speciality = null;
 			while(rs.next()) {
@@ -33,22 +31,13 @@ public class SpecialityDAO {
 			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
 		return result;
 	}
 	
 	public static Speciality getSpecialityBySpecialityCode(int specialityCode) {
 		Speciality result = null;
-		Connection connection = null;
-		try {
-			connection = ConnectionToDB.getNewConnection();
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "SELECT * FROM university.speciality WHERE speciality_code = ?";
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setInt(1, specialityCode);
@@ -62,14 +51,7 @@ public class SpecialityDAO {
 			statement.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
 		return result;
 	}
 	
@@ -81,10 +63,8 @@ public class SpecialityDAO {
 	}
 	
 	public static void createSpeciality(int specialityCode, String specialityName, String specialityDescription) {
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "INSERT INTO university.speciality VALUES(?, ?, ?)";
-			connection = ConnectionToDB.getNewConnection();
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setInt(1, specialityCode);
 			statement.setString(2, specialityName);
@@ -96,14 +76,7 @@ public class SpecialityDAO {
 			statement.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 	
 	public static void updateSpeciality(Speciality newSpeciality) {
@@ -114,10 +87,8 @@ public class SpecialityDAO {
 	}
 	
 	public static void updateSpeciality(int oldSpecialityCode, String newSpecialityName, String newSpecialityDescription) {
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "UPDATE university.speciality SET speciality_name = ?, speciality_description = ? WHERE speciality_code = ?";
-			connection = ConnectionToDB.getNewConnection();
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setString(1, newSpecialityName);
 			statement.setString(2, newSpecialityDescription);
@@ -129,14 +100,7 @@ public class SpecialityDAO {
 			statement.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 	
 	public static void deleteSpeciality(Speciality speciality) {
@@ -145,10 +109,8 @@ public class SpecialityDAO {
 	}
 	
 	public static void deleteSpeciality(int specialityCode) {
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "DELETE FROM university.speciality WHERE speciality_code = ?";
-			connection = ConnectionToDB.getNewConnection();
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setInt(1, specialityCode);
 			int rows = statement.executeUpdate();
@@ -156,14 +118,7 @@ public class SpecialityDAO {
 			statement.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 	
 	public static boolean isEquals(Speciality speciality) {

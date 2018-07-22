@@ -17,10 +17,8 @@ public class MarkDAO {
 
 	public static Set<Mark> getAllMarks() {
 		Set<Mark> result = new HashSet<>();
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "SELECT * FROM university.mark_for_exam";
-			connection = ConnectionToDB.getNewConnection();
 			ResultSet rs = connection.createStatement().executeQuery(query);
 			Mark mark = null;
 			while(rs.next()) {
@@ -36,14 +34,7 @@ public class MarkDAO {
 			rs.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
 		return result;
 	}
 	
@@ -55,10 +46,8 @@ public class MarkDAO {
 	
 	public static Mark getMarkByStudentSubject(int studentCode, int subjectCode) {
 		Mark result = null;
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "SELECT * FROM university.mark_for_exam WHERE student_code = ? AND subject_code = ?";
-			connection = ConnectionToDB.getNewConnection();
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setInt(1, studentCode);
 			statement.setInt(2, subjectCode);
@@ -72,13 +61,6 @@ public class MarkDAO {
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 		return result;
 	}
@@ -98,10 +80,8 @@ public class MarkDAO {
 	}
 	
 	public static void createMark(int studentCode, int subjectCode, Date date, int markScore) {
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "INSERT INTO university.mark_for_exam VALUES(?, ?, ?, ?)";
-			connection = ConnectionToDB.getNewConnection();
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setInt(1, studentCode);
 			statement.setInt(2, subjectCode);
@@ -114,13 +94,6 @@ public class MarkDAO {
 			statement.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 	}
 	
@@ -139,10 +112,8 @@ public class MarkDAO {
 	}
 	
 	public static void updateMark(int studentCode, int subjectCode, Date date, int markScore) {
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "UPDATE university.mark_for_exam SET date_of_examination = ?, mark = ? WHERE student_code = ? AND subject_code = ?";
-			connection = ConnectionToDB.getNewConnection();
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setDate(1, date);
 			statement.setInt(2, markScore);
@@ -155,14 +126,7 @@ public class MarkDAO {
 			statement.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 	
 	public static void deleteMark(Mark mark) {
@@ -178,10 +142,8 @@ public class MarkDAO {
 	}
 	
 	public static void deleteMark(int studentCode, int subjectCode) {
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "DELETE FROM university.mark_for_exam WHERE student_code = ? AND subject_code = ?";
-			connection = ConnectionToDB.getNewConnection();
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setInt(1, studentCode);
 			statement.setInt(2, subjectCode);
@@ -190,13 +152,6 @@ public class MarkDAO {
 			statement.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally{
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 }

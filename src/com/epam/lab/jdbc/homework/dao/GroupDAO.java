@@ -17,10 +17,8 @@ public class GroupDAO {
 	
 	public static Set<Group> getAllGroups(){
 		Set<Group> result = new HashSet<>();
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "SELECT * FROM university.group";
-			connection = ConnectionToDB.getNewConnection();
 			ResultSet rs = connection.createStatement().executeQuery(query);
 			Group group = null;
 			while(rs.next()) {
@@ -34,23 +32,14 @@ public class GroupDAO {
 			rs.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
 		return result;
 	}
 	
 	public static Group getGroupByGroupId(int inputGroupId) {
 		Group result = null;
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "SELECT * FROM university.group WHERE group_id = ?";
-			connection = ConnectionToDB.getNewConnection();
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setInt(1, inputGroupId);
 			ResultSet rs = statement.executeQuery();
@@ -65,13 +54,6 @@ public class GroupDAO {
 			statement.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 		return result;
 	}
@@ -90,10 +72,8 @@ public class GroupDAO {
 	}
 	
 	public static void createGroup(int groupId, String groupName, int yearOfStudying, int specialityCode) {
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "INSERT INTO university.group VALUES(?, ?, ?, ?)";
-			connection = ConnectionToDB.getNewConnection();
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setInt(1, groupId);
 			statement.setString(2, groupName);
@@ -106,14 +86,7 @@ public class GroupDAO {
 			statement.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 	
 	public static void updateGroup(Group group) {
@@ -130,10 +103,8 @@ public class GroupDAO {
 	}
 	
 	public static void updateGroup(int groupId, String groupName, int yearOfStudying, int specialityCode) {
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "UPDATE university.group SET group_name = ?, year_of_studying = ?, speciality_code = ? WHERE group_id = ?";
-			connection = ConnectionToDB.getNewConnection();
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setString(1, groupName);
 			statement.setInt(2, yearOfStudying);
@@ -146,14 +117,7 @@ public class GroupDAO {
 			statement.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 	
 	public static void deleteGroup(Group group) {
@@ -162,10 +126,8 @@ public class GroupDAO {
 	}
 	
 	public static void deleteGroup(int groupId) {
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "DELETE FROM university.group WHERE group_id = ?";
-			connection = ConnectionToDB.getNewConnection();
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setInt(1, groupId);
 			int rows = statement.executeUpdate();
@@ -173,13 +135,6 @@ public class GroupDAO {
 			statement.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally{
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 	}
 }

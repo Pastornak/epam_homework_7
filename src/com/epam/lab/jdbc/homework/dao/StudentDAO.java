@@ -19,10 +19,8 @@ public class StudentDAO {
 	
 	public static Set<Student> getAllStudents() {
 		Set<Student> result = new HashSet<>();
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "SELECT * FROM university.student";
-			connection = ConnectionToDB.getNewConnection();
 			ResultSet rs = connection.createStatement().executeQuery(query);
 			Student student = null;
 			while(rs.next()) {
@@ -50,23 +48,14 @@ public class StudentDAO {
 			rs.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
 		return result;
 	}
 	
 	public static Student getStudentByStudentCode(int studentCode) {
 		Student result = null;
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "SELECT * FROM university.student WHERE student_code = ?";
-			connection = ConnectionToDB.getNewConnection();
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setInt(1, studentCode);
 			ResultSet rs = statement.executeQuery();
@@ -94,14 +83,7 @@ public class StudentDAO {
 			statement.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
 		return result;
 	}
 	
@@ -140,10 +122,8 @@ public class StudentDAO {
 	public static void createStudent(int studentCode, String surname, String name, String patronymic, String sex, Date dateOfBirth,
 			String address, String phoneNumber, String passportInfo, String gradebookNumber, Date entryDate,
 			int groupId, int specialityCode, String formOfStudying, String motherName, String fatherName) {
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "INSERT INTO university.student VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-			connection = ConnectionToDB.getNewConnection();
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setInt(1, studentCode);
 			statement.setString(2, surname);
@@ -168,13 +148,6 @@ public class StudentDAO {
 			statement.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 	}
 	
@@ -213,12 +186,10 @@ public class StudentDAO {
 	public static void updateStudent(int studentCode, String surname, String name, String patronymic, String sex, Date dateOfBirth,
 			String address, String phoneNumber, String passportInfo, String gradebookNumber, Date entryDate,
 			int groupId, int specialityCode, String formOfStudying, String motherName, String fatherName) {
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "UPDATE university.student SET surname = ?, name = ?, patronymic = ?, sex = ?, date_of_birth = ?,"
 					+ "address = ?, phone = ?, passport_info = ?, gradebook_number = ?, entry_date = ?, group_id = ?,"
 					+ "speciality_code = ?, form_of_studying = ?, name_of_mother = ?, name_of_father = ? WHERE student_code + ?";
-			connection = ConnectionToDB.getNewConnection();
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setString(1, surname);
 			statement.setString(2, name);
@@ -243,14 +214,7 @@ public class StudentDAO {
 			statement.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 	
 	public static void deleteStudent(Student student) {
@@ -259,10 +223,8 @@ public class StudentDAO {
 	}
 	
 	public static void deleteStudent(int studentCode) {
-		Connection connection = null;
-		try {
+		try (Connection connection = ConnectionToDB.getNewConnection()){
 			String query = "DELETE FROM university.student WHERE student_code = ?";
-			connection = ConnectionToDB.getNewConnection();
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setInt(1, studentCode);
 			int rows = statement.executeUpdate();
@@ -270,13 +232,6 @@ public class StudentDAO {
 			statement.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally{
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 }

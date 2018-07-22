@@ -7,6 +7,8 @@ public class Group {
 	private int yearOfStudying;
 	private Speciality speciality;
 	
+	public Group() {}
+	
 	public Group(int groupId, String groupName, int yearOfStudying, Speciality speciality) {
 		super();
 		this.groupId = groupId;

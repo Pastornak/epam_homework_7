@@ -9,6 +9,8 @@ public class Mark {
 	private Date examinationDate;
 	private int mark;
 	
+	public Mark() {}
+	
 	public Mark(Student student, Subject subject, Date examinationDate, int mark) {
 		super();
 		this.student = student;

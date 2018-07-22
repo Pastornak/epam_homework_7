@@ -6,6 +6,8 @@ public class Speciality {
 	private String specialityName;
 	private String specialityDescription;
 	
+	public Speciality() {}
+	
 	public Speciality(int specialityCode, String specialityName, String specialityDescription) {
 		super();
 		this.specialityCode = specialityCode;
