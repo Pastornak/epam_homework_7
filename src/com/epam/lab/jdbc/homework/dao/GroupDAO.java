@@ -125,16 +125,61 @@ public class GroupDAO {
 		deleteGroup(groupId);
 	}
 	
+	//Made as 1 transaction
 	public static void deleteGroup(int groupId) {
-		try (Connection connection = ConnectionToDB.getNewConnection()){
-			String query = "DELETE FROM university.group WHERE group_id = ?";
-			PreparedStatement statement = connection.prepareStatement(query);
-			statement.setInt(1, groupId);
-			int rows = statement.executeUpdate();
+		Connection connection = null;
+		try {
+			connection = ConnectionToDB.getNewConnection();
+			connection.setAutoCommit(false);
+			Group groupToDelete = GroupDAO.getGroupByGroupId(groupId);
+			int yearOfStudying = groupToDelete.getYearOfStudying();
+			int specialityCode = groupToDelete.getSpeciality().getSpecialityCode();
+			Integer newGroupId = null;
+			String alternativeQuery = "SELECT * FROM university.`group` WHERE group_id != ? AND year_of_studying = ? AND speciality_code = ?";
+			PreparedStatement alternativeGroupStatement = connection.prepareStatement(alternativeQuery);
+			alternativeGroupStatement.setInt(1, groupId);
+			alternativeGroupStatement.setInt(2, yearOfStudying);
+			alternativeGroupStatement.setInt(3, specialityCode);
+			//System.out.println(alternativeGroupStatement.)
+			ResultSet alternativeGroupRS = alternativeGroupStatement.executeQuery();
+			if(alternativeGroupRS.next()) {
+				newGroupId = alternativeGroupRS.getInt(1);
+			} else {
+				throw new SQLException("No alternative groups found, can't delete");
+			}
+			alternativeGroupRS.close();
+			alternativeGroupStatement.close();
+			String studentsToTransferQuery = "UPDATE university.student SET group_id = ? WHERE group_id = ?";
+			PreparedStatement transferStatement = connection.prepareStatement(studentsToTransferQuery);
+			transferStatement.setInt(1, newGroupId);
+			transferStatement.setInt(2, groupId);
+			int transferedStudents = transferStatement.executeUpdate();
+			System.out.println("Transfered " + transferedStudents + " students to other group.");
+			transferStatement.close();
+			String deleteQuery = "DELETE FROM university.group WHERE group_id = ?";
+			PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery);
+			deleteStatement.setInt(1, groupId);
+			int rows = deleteStatement.executeUpdate();
 			System.out.println("Deleted " + rows + " rows");
-			statement.close();
+			deleteStatement.close();
+			connection.commit();
+			connection.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
+			try {
+				connection.rollback();
+				connection.close();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }
